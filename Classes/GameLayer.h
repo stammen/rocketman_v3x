@@ -28,47 +28,17 @@ public:
     static cocos2d::Scene* scene();
 
 private:
-    Point rm_position;
-	Vec2  rm_velocity;
-	Vec2  rm_acceleration;
-
-	int currentPlatformTag;
-	int platformCount;
-	float currentPlatformY;
-	float currentMaxPlatformStep;
-	int currentBonusType;
-	int currentBonusPlatformIndex;
-	bool rm_lookingRight;
-	int score;
-	int fuelInTank;
-
-	Sprite *pHealthSprite;
-	ProgressTimer *pHealthBar;
+    cocos2d::Point rm_position;
+    
 	Sprite *rocketMan;
 	Animate *jetpackAnimation;
-	Sprite *bonus5;
-	Sprite *bonus10;
-	Sprite *bonus50;
-	Sprite *bonus100;
 
-	bool gameSuspended;
-
-	void _initPlatform();
-	void _initPlatforms();
-	void _resetPlatform();
-	void _resetPlatforms();
     void _startGame();
     void _resetRocketMan();
-	void _jump();
-	void _resetBonus();
-	void _superJump();
-	void _showHighScores();
+
+	
+
 	void _initJetPackAnimation();
-
-	virtual void onClickBegan(cocos2d::EventKeyboard::KeyCode key, Event* event);
-	virtual void onClickEnded(cocos2d::EventKeyboard::KeyCode key, Event* event);
-
-	void onAcceleration(cocos2d::Acceleration *acc, cocos2d::Event *event);
 };
 
 #endif /* defined(__RocketManCocos2dx__GameLayer__) */

@@ -30,7 +30,9 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 //
+
 #include "ccShader_Position_uColor.frag"
+
 #include "ccShader_Position_uColor.vert"
 
 //
@@ -87,5 +89,7 @@ NS_CC_BEGIN
 #include "ccShader_3D_Skybox.frag"
 #include "ccShader_3D_Terrain.vert"
 #include "ccShader_3D_Terrain.frag"
+#include "ccShader_CameraClear.vert"
+#include "ccShader_CameraClear.frag"
 
 NS_CC_END

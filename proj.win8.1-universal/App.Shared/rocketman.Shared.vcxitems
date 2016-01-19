@@ -17,9 +17,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Classes\AppDelegate.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Classes\GameLayer.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Classes\HighScoreLayer.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Classes\MainLayer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)App.xaml.cpp">
       <DependentUpon>$(MSBuildThisFileDirectory)App.xaml</DependentUpon>
     </ClCompile>
@@ -29,10 +27,7 @@
       <DependentUpon>$(MSBuildThisFileDirectory)OpenGLESPage.xaml</DependentUpon>
     </ClCompile>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Classes\AppDelegate.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Classes\GameConfig.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Classes\GameLayer.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Classes\HighScoreLayer.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Classes\MainLayer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Classes\HelloWorldScene.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)App.xaml.h">
       <DependentUpon>$(MSBuildThisFileDirectory)App.xaml</DependentUpon>
     </ClInclude>

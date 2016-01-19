@@ -4,4 +4,9 @@
   <PropertyGroup Label="COCOS2">
     <COCOS2D_PLATFORM Condition=" '$(COCOS2_PLATFORM)' == '' ">win10</COCOS2D_PLATFORM>
   </PropertyGroup>
+  <ItemDefinitionGroup>
+    <Link>
+      <AdditionalDependencies>msxml6.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
 </Project>

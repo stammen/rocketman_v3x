@@ -24,6 +24,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
+#include "platform/CCPlatformConfig.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+
 #include "HttpClient.h"
 
 #include <thread>
@@ -73,7 +76,7 @@ namespace network {
         pToBuffer->insert(pToBuffer->end(), pFromBuffer->begin(), pFromBuffer->end());
     }
 
-    static void processResponse(HttpResponse* response, std::string& errorStr);
+    static void processHttpResponse(HttpResponse* response, std::string& errorStr);
 
     static HttpRequest *s_requestSentinel = new HttpRequest;
 
@@ -105,7 +108,7 @@ namespace network {
             // Create a HttpResponse object, the default setting is http access failed
             HttpResponse *response = new (std::nothrow) HttpResponse(request);
 
-            processResponse(response, s_errorBuffer);
+            processHttpResponse(response, s_errorBuffer);
 
 
             // add response packet into queue
@@ -137,7 +140,7 @@ namespace network {
     void HttpClient::networkThreadAlone(HttpRequest* request, HttpResponse* response)
     {
         std::string errorStr;
-        processResponse(response, errorStr);
+        processHttpResponse(response, errorStr);
 
         auto scheduler = Director::getInstance()->getScheduler();
         scheduler->performFunctionInCocosThread([response, request]{
@@ -160,7 +163,7 @@ namespace network {
     }
 
     // Process Response
-    static void processResponse(HttpResponse* response, std::string& errorStr)
+    static void processHttpResponse(HttpResponse* response, std::string& errorStr)
     {
         auto request = response->getHttpRequest();
         long responseCode = -1;
@@ -364,3 +367,6 @@ namespace network {
     }
 
 NS_CC_END
+
+#endif // #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+

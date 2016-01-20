@@ -36,7 +36,7 @@ GameLayer::GameLayer()
     this->addChild(rocketMan, 4, kRocketMan);
 
 	// This is to create the score
-	LabelBMFont* scoreLabel = LabelBMFont::create("0", "bitmapFont.fnt");
+    auto scoreLabel = Label::createWithBMFont("bitmapFont.fnt", "0");
 	addChild(scoreLabel, 5, kScoreLabel);
 	scoreLabel->setPosition(Vec2(160, 430));
 
@@ -215,7 +215,7 @@ void GameLayer::update(float dt)
 
 		score += (int)delta;
 		__String* scoreStr = __String::createWithFormat("%d", score);
-		LabelBMFont* scoreLabel = dynamic_cast<LabelBMFont*>(getChildByTag(kScoreLabel));
+        Label* scoreLabel = dynamic_cast<Label*>(getChildByTag(kScoreLabel));
 		scoreLabel->setString(scoreStr->getCString());
 	}
 

@@ -20,9 +20,9 @@ public:
     HighScoreLayer(int lastScore);
 	CustomCommand _customCommand;
 
-	virtual void draw(Renderer *renderer, const kmMat4& transform, uint32_t flags);
+	virtual void draw(Renderer *renderer, const cocos2d::Mat4& transform, uint32_t flags);
 
-	virtual void onDraw(const kmMat4 &transform, bool transformUpdated);
+	virtual void onDraw(const cocos2d::Mat4& transform, uint32_t transformUpdated);
 
 
 private:

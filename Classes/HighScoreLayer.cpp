@@ -34,14 +34,14 @@ HighScoreLayer::HighScoreLayer(int lastScore) : currentScore(lastScore)
 
     Sprite* title = Sprite::createWithSpriteFrameName("high_scores.png");
     this->addChild(title, 5);
-    title->setPosition(ccp(160, 420));
+    title->setPosition(Vec2(160, 420));
 
     float start_y = 360.0f;
     float step = 27.0f;
     int count = 0;
 
     //
-    UserDefault* defaults = UserDefault::sharedUserDefault();
+    UserDefault* defaults = UserDefault::getInstance();
     string highscores = defaults->getStringForKey("highscores", "");
     vector<string> vectorScores = split(highscores, "\n");
     if (vectorScores.size() > 0)
@@ -54,22 +54,22 @@ HighScoreLayer::HighScoreLayer(int lastScore) : currentScore(lastScore)
                 string player = data[0];
                 int score = atoi(data[1].c_str());
 
-                LabelTTF* label1 = LabelTTF::create(CCString::createWithFormat("%d", (count + 1))->getCString(), "Arial", 14, CCSizeMake(30, 40), kCCTextAlignmentRight, kCCVerticalTextAlignmentCenter);
+                auto label1 = Label::createWithTTF(CCString::createWithFormat("%d", (count + 1))->getCString(), "fonts/arial.ttf", 14, Size::Size(30, 40), TextHAlignment::RIGHT, TextVAlignment::CENTER);
                 addChild(label1, 5);
                 label1->setColor(Color3B::WHITE);
                 label1->setOpacity(200);
-                label1->setPosition(ccp(15, start_y - count * step - 2.0f));
+                label1->setPosition(Vec2(15, start_y - count * step - 2.0f));
 
-                LabelTTF* label2 = LabelTTF::create(player.c_str(), "Arial", 16, CCSizeMake(240, 40), kCCTextAlignmentLeft, kCCVerticalTextAlignmentCenter);
+                auto label2 = Label::createWithTTF(player.c_str(), "fonts/arial.ttf", 16, Size::Size(240, 40), TextHAlignment::LEFT, TextVAlignment::CENTER);
                 addChild(label2, 5);
                 label2->setColor(Color3B::WHITE);
-                label2->setPosition(ccp(160, start_y - count * step));
+                label2->setPosition(Vec2(160, start_y - count * step));
 
-                LabelTTF* label3 = LabelTTF::create(CCString::createWithFormat("%d", score)->getCString(), "Arial", 16, CCSizeMake(290, 40), kCCTextAlignmentRight, kCCVerticalTextAlignmentCenter);
+                auto label3 = Label::createWithTTF(CCString::createWithFormat("%d", score)->getCString(), "fonts/arial.ttf", 16, Size::Size(290, 40), TextHAlignment::RIGHT, TextVAlignment::CENTER);
                 addChild(label3, 5);
                 label3->setColor(Color3B::WHITE);
                 label3->setOpacity(200);
-                label3->setPosition(ccp(160, start_y - count * step));
+                label3->setPosition(Vec2(160, start_y - count * step));
 
                 count++;
                 if (count == 10)
@@ -86,19 +86,19 @@ HighScoreLayer::HighScoreLayer(int lastScore) : currentScore(lastScore)
 
     auto mainMenu = Menu::create(playAgainItem, nullptr);
     mainMenu->alignItemsVerticallyWithPadding(9.0f);
-    mainMenu->setPosition(ccp(160, 58));
+    mainMenu->setPosition(Vec2(160, 58));
     this->addChild(mainMenu);
 }
 
 void HighScoreLayer::_loadCurrentPlayer()
 {
     currentPlayer = "";
-    currentPlayer = UserDefault::sharedUserDefault()->getStringForKey("player", "anonymous");
+    currentPlayer = UserDefault::getInstance()->getStringForKey("player", "anonymous");
 }
 
 void HighScoreLayer::_loadHighScores()
 {
-    UserDefault* defaults = UserDefault::sharedUserDefault();
+    UserDefault* defaults = UserDefault::getInstance();
 
 #ifdef RESET_DEFAULTS
     defaults->setStringForKey("highscores", "");
@@ -126,7 +126,7 @@ void HighScoreLayer::_loadHighScores()
 
 void HighScoreLayer::_updateHighScores()
 {
-    UserDefault* defaults = UserDefault::sharedUserDefault();
+    UserDefault* defaults = UserDefault::getInstance();
 
     currentScorePosition = -1;
     int count = 0;
@@ -156,13 +156,13 @@ void HighScoreLayer::_updateHighScores()
         {
             highscores = defaults->getStringForKey("highscores", "");
             vectorScores = split(highscores, "\n");
-            CCString* dataScore = CCString::createWithFormat("%s;%d", currentPlayer.c_str(), currentScore);
+            std::string dataScore = StringUtils::format("%s;%d", currentPlayer.c_str(), currentScore);
 
             string tmpScore = "";
             for (int i = vectorScores.size() - 2; i > currentScorePosition; i--)
                 vectorScores[i + 1] = vectorScores[i];
 
-            vectorScores[currentScorePosition] = string(dataScore->getCString());
+            vectorScores[currentScorePosition] = dataScore;
             string scores = "";
             for (unsigned int i = 0; i < vectorScores.size(); i++)
                 scores += vectorScores[i] + "\n";
@@ -188,18 +188,19 @@ vector<string> HighScoreLayer::split(string str, string value)
 
 void HighScoreLayer::_saveCurrentPlayer()
 {
-    UserDefault* defaults = UserDefault::sharedUserDefault();
+    UserDefault* defaults = UserDefault::getInstance();
     defaults->setStringForKey("player", currentPlayer);
     defaults->flush();
 }
 
-void HighScoreLayer::draw(Renderer *renderer, const kmMat4& transform, uint32_t flags)
+void HighScoreLayer::draw(Renderer *renderer, const cocos2d::Mat4& transform, uint32_t flags)
 {
 	_customCommand.init(_globalZOrder + 10);
 	_customCommand.func = CC_CALLBACK_0(HighScoreLayer::onDraw, this, transform, flags);
 	renderer->addCommand(&_customCommand);
 }
-void HighScoreLayer::onDraw(const kmMat4 &transform, bool transformUpdated)
+
+void HighScoreLayer::onDraw(const cocos2d::Mat4& transform, uint32_t transformUpdated)
 {
 	if (currentScorePosition < 0)
 		return;
@@ -211,7 +212,7 @@ void HighScoreLayer::onDraw(const kmMat4 &transform, bool transformUpdated)
     DrawPrimitives::drawSolidRect(Vec2(x, y), Vec2(x + width, y + height), ccc4f(1.0f, 0.0f, 0.0f, 0.4f));
 }
 
-void HighScoreLayer::button1Callback(CCObject *pSender)
+void HighScoreLayer::button1Callback(cocos2d::Object *pSender)
 {
     TransitionFade* scene = TransitionFade::create(0.5f, GameLayer::scene(), Color3B::WHITE);
     Director::getInstance()->replaceScene(scene);

@@ -52,13 +52,13 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	searchPath.push_back("Fonts");
 
 	// set search paths
-	FileUtils::sharedFileUtils()->setSearchPaths(searchPath);
+	FileUtils::getInstance()->setSearchPaths(searchPath);
 
     // turn on display FPS
     director->setDisplayStats(true);
 
     // set FPS. the default value is 1.0/60 if you don't call this
-    director->setAnimationInterval(1.0 / 60);
+    director->setAnimationInterval(1.0f / 60.0f);
 
     register_all_packages();
 

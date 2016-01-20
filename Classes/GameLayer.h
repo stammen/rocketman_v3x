@@ -46,10 +46,6 @@ private:
 	ProgressTimer *pHealthBar;
 	Sprite *rocketMan;
 	Animate *jetpackAnimation;
-	Sprite *bonus5;
-	Sprite *bonus10;
-	Sprite *bonus50;
-	Sprite *bonus100;
 
 	bool gameSuspended;
 
@@ -60,13 +56,9 @@ private:
     void _startGame();
     void _resetRocketMan();
 	void _jump();
-	void _resetBonus();
-	void _superJump();
-	void _showHighScores();
-	void _initJetPackAnimation();
+	
 
-	virtual void onClickBegan(cocos2d::EventKeyboard::KeyCode key, Event* event);
-	virtual void onClickEnded(cocos2d::EventKeyboard::KeyCode key, Event* event);
+	void _initJetPackAnimation();
 
 	void onAcceleration(cocos2d::Acceleration *acc, cocos2d::Event *event);
 };

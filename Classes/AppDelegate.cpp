@@ -5,7 +5,6 @@
 #include "GameConfig.h"
 #include "GameLayer.h"
 #include "SimpleAudioEngine.h"
-#include "HighScoreLayer.h"
 
 USING_NS_CC;
 
@@ -63,7 +62,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
-    auto scene = HighScoreLayer::scene(0);
+    auto scene = GameLayer::scene();
 
     // run
     director->runWithScene(scene);

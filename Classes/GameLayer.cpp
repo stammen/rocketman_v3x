@@ -10,7 +10,6 @@
 
 #include "GameLayer.h"
 #include "SimpleAudioEngine.h"
-#include "HighScoreLayer.h"
 
 using namespace cocos2d;
 
@@ -87,11 +86,6 @@ GameLayer::GameLayer()
 	auto listener = EventListenerAcceleration::create(CC_CALLBACK_2(GameLayer::onAcceleration, this));
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-	auto keyboardListener = EventListenerKeyboard::create();
-	keyboardListener->onKeyPressed = CC_CALLBACK_2(GameLayer::onClickBegan, this);
-	keyboardListener->onKeyReleased = CC_CALLBACK_2(GameLayer::onClickEnded, this);
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
-
 #if K_PLAY_BACKGROUND_MUSIC
 	// play and loop background music during game
 	auto soundEngine = CocosDenshion::SimpleAudioEngine::getInstance();
@@ -107,43 +101,7 @@ void GameLayer::onAcceleration(cocos2d::Acceleration *pAccelerationValue, cocos2
 
 	// RocketMan's acceleration, left and right
 	float accel_filter = 0.1f;
-	rm_velocity.x = rm_velocity.x * accel_filter + pAccelerationValue->x * (1.0f - accel_filter) * 500.0f;
-}
-
-int x = 0;
-void GameLayer::onClickBegan(cocos2d::EventKeyboard::KeyCode key, Event* event)
-{
-	if (key == EventKeyboard::KeyCode::KEY_SPACE)
-	{
-		//onInputBegan();
-		x = 5;
-	}
-}
-
-void GameLayer::onClickEnded(cocos2d::EventKeyboard::KeyCode key, Event* event)
-{
-	if (gameSuspended)
-		return;
-
-	// RocketMan's acceleration, left and right
-	float accel_filter = 0.1f;
-
-	// bug in Cocos2d-x, on this device it is inverting the axes and directions
-
-	if (key == EventKeyboard::KeyCode::KEY_LEFT_ARROW)
-	{
-		//onInputBegan();
-		x = 6;
-		//rm_velocity.x = rm_velocity.x * accel_filter + -1 * pAccelerationValue->y * (1.0f - accel_filter) * 500.0f;
-		rm_velocity.x = rm_velocity.x * accel_filter + -0.1 * (1.0f - accel_filter) * 500.0f;
-	}
-
-	if (key == EventKeyboard::KeyCode::KEY_RIGHT_ARROW)
-	{
-		//onInputBegan();
-		x = 6;
-		rm_velocity.x = rm_velocity.x * accel_filter + 0.1 * (1.0f - accel_filter) * 500.0f;
-	}
+    rm_velocity.x = rm_velocity.x * accel_filter + pAccelerationValue->x * (1.0f - accel_filter) * 500.0f;
 }
 
 void GameLayer::_initJetPackAnimation()
@@ -244,7 +202,6 @@ void GameLayer::update(float dt)
 		if (pHealthBar->getPercentage() <= 0)
 		{
 			// TODO: show high scores
-			_showHighScores();
 		}
 	}
 
@@ -340,7 +297,6 @@ void GameLayer::update(float dt)
 			if (rm_position.y < -rm_size.height)
 			{
 				// TODO: (exit the game here)
-				_showHighScores();
 			}
 		}
 
@@ -399,18 +355,6 @@ void GameLayer::update(float dt)
 	//// draw RocketMan at its new position
 	rocketMan->setPosition(rm_position);
 }
-
-
-void GameLayer::_showHighScores()
-{
-	gameSuspended = true;
-	stopAllActions();
-	unscheduleUpdate();
-
-	TransitionFade* scene = TransitionFade::create(1.0f, HighScoreLayer::scene(score), Color3B::WHITE);
-	Director::getInstance()->replaceScene(scene);
-}
-
 
 void GameLayer::_resetBonus()
 {

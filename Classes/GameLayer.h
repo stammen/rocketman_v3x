@@ -62,11 +62,8 @@ private:
 	void _jump();
 	void _resetBonus();
 	void _superJump();
-	void _showHighScores();
-	void _initJetPackAnimation();
 
-	virtual void onClickBegan(cocos2d::EventKeyboard::KeyCode key, Event* event);
-	virtual void onClickEnded(cocos2d::EventKeyboard::KeyCode key, Event* event);
+	void _initJetPackAnimation();
 
 	void onAcceleration(cocos2d::Acceleration *acc, cocos2d::Event *event);
 };

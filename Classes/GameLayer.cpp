@@ -107,7 +107,7 @@ void GameLayer::onAcceleration(cocos2d::Acceleration *pAccelerationValue, cocos2
 
 	// RocketMan's acceleration, left and right
 	float accel_filter = 0.1f;
-	rm_velocity.x = rm_velocity.x * accel_filter + pAccelerationValue->x * (1.0f - accel_filter) * 500.0f;
+    rm_velocity.x = rm_velocity.x * accel_filter + pAccelerationValue->x * (1.0f - accel_filter) * 500.0f;
 }
 
 int x = 0;
@@ -129,43 +129,6 @@ void GameLayer::onClickEnded(cocos2d::EventKeyboard::KeyCode key, Event* event)
 	float accel_filter = 0.1f;
 
 	// bug in Cocos2d-x, on this device it is inverting the axes and directions
-
-	if (key == EventKeyboard::KeyCode::KEY_LEFT_ARROW)
-	{
-		//onInputBegan();
-		x = 6;
-		//rm_velocity.x = rm_velocity.x * accel_filter + -1 * pAccelerationValue->y * (1.0f - accel_filter) * 500.0f;
-		rm_velocity.x = rm_velocity.x * accel_filter + -0.1 * (1.0f - accel_filter) * 500.0f;
-	}
-
-	if (key == EventKeyboard::KeyCode::KEY_RIGHT_ARROW)
-	{
-		//onInputBegan();
-		x = 6;
-		rm_velocity.x = rm_velocity.x * accel_filter + 0.1 * (1.0f - accel_filter) * 500.0f;
-	}
-}
-
-int x = 0;
-void GameLayer::onClickBegan(cocos2d::EventKeyboard::KeyCode key, Event* event)
-{
-	if (key == EventKeyboard::KeyCode::KEY_SPACE)
-	{
-		//onInputBegan();
-		x = 5;
-	}
-}
-
-void GameLayer::onClickEnded(cocos2d::EventKeyboard::KeyCode key, Event* event)
-{
-	if (gameSuspended)
-		return;
-
-	// RocketMan's acceleration, left and right
-	float accel_filter = 0.1f;
-
-	// bug in Cocos2d-x, on this device it is inverting the axes and directions
-	
 	
 
 	if (key == EventKeyboard::KeyCode::KEY_LEFT_ARROW)

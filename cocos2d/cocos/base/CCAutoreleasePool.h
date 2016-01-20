@@ -37,7 +37,7 @@ NS_CC_BEGIN
 
 
 /**
- * A pool for managing autorlease objects.
+ * A pool for managing autorelease objects.
  * @js NA
  */
 class CC_DLL AutoreleasePool
@@ -88,17 +88,19 @@ public:
      * @lua NA
      */
     void clear();
-
+    
+#if defined(COCOS2D_DEBUG) && (COCOS2D_DEBUG > 0)
     /**
      * Whether the autorelease pool is doing `clear` operation.
      *
-     * @return True if autorelase pool is clearning, false if not.
+     * @return True if autorelease pool is clearing, false if not.
      *
      * @js NA
      * @lua NA
      */
     bool isClearing() const { return _isClearing; };
-
+#endif
+    
     /**
      * Checks whether the autorelease pool contains the specified object.
      *
@@ -132,11 +134,13 @@ private:
      */
     std::vector<Ref*> _managedObjectArray;
     std::string _name;
- 
+    
+#if defined(COCOS2D_DEBUG) && (COCOS2D_DEBUG > 0)
     /**
      *  The flag for checking whether the pool is doing `clear` operation.
      */
     bool _isClearing;
+#endif
 };
 
 // end of base group
@@ -157,7 +161,7 @@ public:
     
     /**
      * Get current auto release pool, there is at least one auto release pool that created by engine.
-     * You can create your own auto release pool at demand, which will be put into auto releae pool stack.
+     * You can create your own auto release pool at demand, which will be put into auto release pool stack.
      */
     AutoreleasePool *getCurrentPool() const;
 

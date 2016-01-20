@@ -31,7 +31,7 @@ MainLayer::MainLayer()
 	// a single sprite can be extracted from the cache using createWithSpriteFrameName
     Sprite *background = Sprite::createWithSpriteFrameName("background.png");
     this->addChild(background);
-    background->setPosition(ccp(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f));
+    background->setPosition(Vec2(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f));
 }
 
 void MainLayer::update(float dt)

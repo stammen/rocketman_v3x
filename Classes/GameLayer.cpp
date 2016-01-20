@@ -42,10 +42,10 @@ GameLayer::GameLayer()
 
 	// Add the healthbar and initialize it to be 100
 	pHealthSprite = Sprite::createWithSpriteFrameName("health_bar.png");
-	pHealthSprite->setAnchorPoint(ccp(0.0, 0.0));
+	pHealthSprite->setAnchorPoint(Vec2(0.0, 0.0));
 	pHealthBar = ProgressTimer::create(pHealthSprite);
 	pHealthBar->setScale(0.5, 0.5);
-	pHealthBar->setType(kCCProgressTimerTypeBar);
+	pHealthBar->setType(ProgressTimer::Type::BAR);
 	pHealthBar->setBarChangeRate(Vec2(1, 0));
 	pHealthBar->setPercentage(100);
 	pHealthBar->setPosition(Vec2(origin.x + 10, visibleSize.height - 20));
@@ -70,9 +70,9 @@ GameLayer::GameLayer()
 	bonus100->setVisible(false);
 
 	// This is to create the score
-	LabelBMFont* scoreLabel = LabelBMFont::create("0", "bitmapFont.fnt");
+    auto scoreLabel = Label::createWithBMFont("bitmapFont.fnt", "0");
 	addChild(scoreLabel, 5, kScoreLabel);
-	scoreLabel->setPosition(ccp(160, 430));
+	scoreLabel->setPosition(Vec2(160, 430));
 
     _startGame();
 
@@ -94,7 +94,7 @@ GameLayer::GameLayer()
 
 #if K_PLAY_BACKGROUND_MUSIC
 	// play and loop background music during game
-	auto soundEngine = CocosDenshion::SimpleAudioEngine::sharedEngine();
+	auto soundEngine = CocosDenshion::SimpleAudioEngine::getInstance();
 	soundEngine->playBackgroundMusic("Sounds/background.wav", true);
 	soundEngine->setBackgroundMusicVolume(K_PLAY_BACKGROUND_MUSIC_VOLUME);
 #endif
@@ -107,10 +107,43 @@ void GameLayer::onAcceleration(cocos2d::Acceleration *pAccelerationValue, cocos2
 
 	// RocketMan's acceleration, left and right
 	float accel_filter = 0.1f;
+	rm_velocity.x = rm_velocity.x * accel_filter + pAccelerationValue->x * (1.0f - accel_filter) * 500.0f;
+}
+
+int x = 0;
+void GameLayer::onClickBegan(cocos2d::EventKeyboard::KeyCode key, Event* event)
+{
+	if (key == EventKeyboard::KeyCode::KEY_SPACE)
+	{
+		//onInputBegan();
+		x = 5;
+	}
+}
+
+void GameLayer::onClickEnded(cocos2d::EventKeyboard::KeyCode key, Event* event)
+{
+	if (gameSuspended)
+		return;
+
+	// RocketMan's acceleration, left and right
+	float accel_filter = 0.1f;
 
 	// bug in Cocos2d-x, on this device it is inverting the axes and directions
-	//rm_velocity.x = rm_velocity.x * accel_filter + pAccelerationValue->x * (1.0f - accel_filter) * 500.0f;
-	rm_velocity.x = rm_velocity.x * accel_filter + -1*pAccelerationValue->y * (1.0f - accel_filter) * 500.0f;
+
+	if (key == EventKeyboard::KeyCode::KEY_LEFT_ARROW)
+	{
+		//onInputBegan();
+		x = 6;
+		//rm_velocity.x = rm_velocity.x * accel_filter + -1 * pAccelerationValue->y * (1.0f - accel_filter) * 500.0f;
+		rm_velocity.x = rm_velocity.x * accel_filter + -0.1 * (1.0f - accel_filter) * 500.0f;
+	}
+
+	if (key == EventKeyboard::KeyCode::KEY_RIGHT_ARROW)
+	{
+		//onInputBegan();
+		x = 6;
+		rm_velocity.x = rm_velocity.x * accel_filter + 0.1 * (1.0f - accel_filter) * 500.0f;
+	}
 }
 
 int x = 0;
@@ -172,8 +205,8 @@ void GameLayer::_initJetPackAnimation()
 
 GameLayer::~GameLayer()
 {
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->stopAllEffects();
+	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+	CocosDenshion::SimpleAudioEngine::getInstance()->stopAllEffects();
 }
 
 
@@ -302,7 +335,7 @@ void GameLayer::update(float dt)
 			}
 
 			__String* scoreStr = __String::createWithFormat("%d", score);
-			LabelBMFont* scoreLabel = dynamic_cast<LabelBMFont*>(getChildByTag(kScoreLabel));
+			auto scoreLabel = dynamic_cast<Label*>(getChildByTag(kScoreLabel));
 			scoreLabel->setString(scoreStr->getCString());
 
 			ScaleTo* action1 = ScaleTo::create(0.2f, 1.5f, 0.8f);
@@ -365,7 +398,7 @@ void GameLayer::update(float dt)
 
 
 			Point position = platform->getPosition();
-			position = ccp(position.x, position.y - delta);
+			position = Vec2(position.x, position.y - delta);
 
 			// If the platform just became invisible, reset it to just above the screen
 			if (position.y < -platform->getContentSize().height * 0.5f)
@@ -397,7 +430,7 @@ void GameLayer::update(float dt)
 
 		score += (int)delta;
 		__String* scoreStr = __String::createWithFormat("%d", score);
-		LabelBMFont* scoreLabel = dynamic_cast<LabelBMFont*>(getChildByTag(kScoreLabel));
+		auto scoreLabel = dynamic_cast<Label*>(getChildByTag(kScoreLabel));
 		scoreLabel->setString(scoreStr->getCString());
 	}
 
@@ -449,7 +482,7 @@ void GameLayer::_jump()
 {
 	// play sound effect when player jumps
 #if K_PLAY_SOUND_EFFECTS
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("Sounds/jump.wav");
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("Sounds/jump.wav");
 #endif
 	rm_velocity.y = 350.0f + fabsf(rm_velocity.x);
 }
@@ -508,13 +541,13 @@ void GameLayer::_resetPlatform()
 	else
 		x = CCRANDOM_0_1() * (SCREEN_WIDTH - (int)size.width) + size.width * 0.5f;
 
-	platform->setPosition(ccp(x, currentPlatformY));
+	platform->setPosition(Vec2(x, currentPlatformY));
 	platformCount++;
 
 	if (platformCount == currentBonusPlatformIndex && platformCount != K_MAX_PLATFORMS_IN_GAME)
 	{
 		Sprite* bonus = dynamic_cast<Sprite*>(this->getChildByTag(kBonusStartTag + currentBonusType));
-		bonus->setPosition(ccp(x, currentPlatformY + 30));
+		bonus->setPosition(Vec2(x, currentPlatformY + 30));
 		bonus->setVisible(true);
 	}
 }

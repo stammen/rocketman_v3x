@@ -32,9 +32,7 @@ using namespace Platform;
 using namespace Windows::UI::Core;
 using namespace Windows::UI::Xaml::Controls;
 using namespace Windows::Graphics::Display;
-
-USING_NS_CC;
-
+using namespace cocos2d;
 
 Cocos2dRenderer::Cocos2dRenderer(int width, int height, float dpi, DisplayOrientations orientation, CoreDispatcher^ dispatcher, Panel^ panel)
     : m_app(nullptr)
@@ -56,7 +54,9 @@ Cocos2dRenderer::~Cocos2dRenderer()
 void Cocos2dRenderer::Resume()
 {
     auto director = cocos2d::Director::getInstance();
-    if (!director->getOpenGLView())
+    auto glview = director->getOpenGLView();
+
+    if (!glview) 
     {
         GLViewImpl* glview = GLViewImpl::create("Test Cpp");
         glview->setDispatcher(m_dispatcher.Get());

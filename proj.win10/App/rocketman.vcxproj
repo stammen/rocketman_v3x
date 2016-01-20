@@ -218,7 +218,6 @@
     <ClInclude Include="..\..\Classes\AppDelegate.h" />
     <ClInclude Include="..\..\Classes\GameConfig.h" />
     <ClInclude Include="..\..\Classes\GameLayer.h" />
-    <ClInclude Include="..\..\Classes\HighScoreLayer.h" />
     <ClInclude Include="..\..\Classes\MainLayer.h" />
     <ClInclude Include="App.xaml.h">
       <DependentUpon>App.xaml</DependentUpon>
@@ -244,7 +243,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\..\Classes\GameLayer.cpp" />
-    <ClCompile Include="..\..\Classes\HighScoreLayer.cpp" />
     <ClCompile Include="..\..\Classes\MainLayer.cpp" />
     <ClCompile Include="App.xaml.cpp">
       <DependentUpon>App.xaml</DependentUpon>
